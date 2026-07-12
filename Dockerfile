@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
     git \
     && docker-php-ext-install pdo_mysql gd zip intl
 
-RUN a2dismod -f mpm_event mpm_worker mpm_itk mpm_prefork mpm_winnt mpm_worker && \
-    a2enmod mpm_prefork
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork
 
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
