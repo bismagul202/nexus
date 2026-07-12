@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     git \
     && docker-php-ext-install pdo_mysql gd zip intl
 
+RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork
+
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
@@ -21,7 +23,6 @@ COPY . .
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Ab composer install chalayein
 RUN composer install --no-dev --optimize-autoloader
 
 EXPOSE 80
